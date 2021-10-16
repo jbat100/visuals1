@@ -1,5 +1,8 @@
 {
   "dependencies": {
+    "jp.keijiro.osc-jack": "1.0.3",
+    "com.cysharp.unitask": "2.2.5",
+    "com.neuecc.unirx": "7.1.0",
     "com.unity.collab-proxy": "1.5.7",
     "com.unity.ide.rider": "3.0.7",
     "com.unity.ide.visualstudio": "2.0.9",
@@ -11,7 +14,6 @@
     "com.unity.ugui": "1.0.0",
     "com.unity.visualeffectgraph": "11.0.0",
     "com.unity.visualscripting": "1.6.1",
-    "jp.keijiro.osc-jack": "1.0.3",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
@@ -45,6 +47,18 @@
     "com.unity.modules.xr": "1.0.0"
   },
   "scopedRegistries": [
+    {
+      "name": "package.openupm.com",
+      "url": "https://package.openupm.com",
+      "scopes": [
+        "com.cysharp.unitask",
+        "com.neuecc.unirx",
+        "com.openupm",
+        "jillejr.newtonsoft.json-for-unity",
+        "com.atteneder.draco",
+        "com.atteneder.ktx"
+      ]
+    },
     {
       "name": "Keijiro",
       "url": "https://registry.npmjs.com",

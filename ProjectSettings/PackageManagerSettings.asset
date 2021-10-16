@@ -25,6 +25,18 @@ MonoBehaviour:
     m_Scopes: []
     m_IsDefault: 1
     m_Capabilities: 7
+  - m_Id: scoped:package.openupm.com
+    m_Name: package.openupm.com
+    m_Url: https://package.openupm.com
+    m_Scopes:
+    - com.cysharp.unitask
+    - com.neuecc.unirx
+    - com.openupm
+    - jillejr.newtonsoft.json-for-unity
+    - com.atteneder.draco
+    - com.atteneder.ktx
+    m_IsDefault: 0
+    m_Capabilities: 0
   - m_Id: scoped:Keijiro
     m_Name: Keijiro
     m_Url: https://registry.npmjs.com
@@ -32,22 +44,32 @@ MonoBehaviour:
     - jp.keijiro
     m_IsDefault: 0
     m_Capabilities: 0
-  m_UserSelectedRegistryName: Keijiro
+  m_UserSelectedRegistryName: package.openupm.com
   m_UserAddingNewScopedRegistry: 0
   m_RegistryInfoDraft:
     m_ErrorMessage: 
     m_Original:
-      m_Id: scoped:Keijiro
-      m_Name: Keijiro
-      m_Url: https://registry.npmjs.com
+      m_Id: scoped:package.openupm.com
+      m_Name: package.openupm.com
+      m_Url: https://package.openupm.com
       m_Scopes:
-      - jp.keijiro
+      - com.cysharp.unitask
+      - com.neuecc.unirx
+      - com.openupm
+      - jillejr.newtonsoft.json-for-unity
+      - com.atteneder.draco
+      - com.atteneder.ktx
       m_IsDefault: 0
       m_Capabilities: 0
     m_Modified: 0
-    m_Name: Keijiro
-    m_Url: https://registry.npmjs.com
+    m_Name: package.openupm.com
+    m_Url: https://package.openupm.com
     m_Scopes:
-    - jp.keijiro
+    - com.cysharp.unitask
+    - com.neuecc.unirx
+    - com.openupm
+    - jillejr.newtonsoft.json-for-unity
+    - com.atteneder.draco
+    - com.atteneder.ktx
     m_SelectedScopeIndex: 0
   m_LoadAssets: 0

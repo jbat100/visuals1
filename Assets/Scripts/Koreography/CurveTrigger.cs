@@ -1,9 +1,30 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using SonicBloom.Koreo;
 using UnityEngine;
 
-public enum CurveAcumulationMode
+#if UNITY_EDITOR
+using UnityEditor;
+
+[CustomEditor(typeof(CurveTrigger))]
+public class CurveTriggerEditor : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        DrawDefaultInspector();
+
+        CurveTrigger curveTrigger = (CurveTrigger)target;
+        if(GUILayout.Button("Trigger"))
+        {
+            curveTrigger.Trigger(1f);
+        }
+    }
+}
+#endif
+
+public enum AccumulationMode
 {
     None,
     Sum,
@@ -13,20 +34,47 @@ public enum CurveAcumulationMode
 
 public class CurveTrigger : KoreoResponder
 {
-
-    
     [SerializeField] private AnimationCurve _animationCurve;
 
-    [SerializeField] private CurveAcumulationMode _acumulationMode;
+    [SerializeField] private AccumulationMode _acumulationMode = AccumulationMode.Max;
 
-    [SerializeField] private float _fade;
+    [SerializeField] private float _fade = 1f;
 
     [SerializeField] private float _rest;
 
+    protected override void OnEvent(KoreographyEvent koreographyEvent, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
+    {
+        if (koreographyEvent.HasIntPayload())
+        {
+            float curveValue = koreographyEvent.GetIntValue();
+            Trigger(1f);
+        }
+    }
     
     public void Trigger(float scale)
     {
+        _entries.Add(new TriggerEntry(Time.time, scale, _fade, _animationCurve));
+    }
+
+    private float? _curveValue;
+    public float CurveValue
+    {
+        get
+        {
+            if (_curveValue.HasValue)
+            {
+                return _curveValue.Value;
+            }
+
+            return (_curveValue = _entries.Aggregate(_rest, (current, entry) => entry.Accumulate(Time.time, _acumulationMode, current))).Value;
+        }
+    }
+
+    protected virtual void Update()
+    {
+        _curveValue = null;
         
+        _entries.ExceptWith(_entries.Where(entry => entry.Ended(Time.time)));
     }
 
     private class TriggerEntry
@@ -71,8 +119,20 @@ public class CurveTrigger : KoreoResponder
 
             return result;
         }
+
+        public float Accumulate(float time, AccumulationMode accumulationMode, float current)
+        {
+            float value = GetValue(time);
+            return accumulationMode switch
+            {
+                AccumulationMode.Sum => current + value,
+                AccumulationMode.Max => Mathf.Max(current, value),
+                AccumulationMode.Min => Mathf.Min(current, value),
+                _ => throw new NotImplementedException()
+            };
+        }
     }
     
-    private HashSet<TriggerEntry> _entries = new HashSet<TriggerEntry>();
+    private readonly HashSet<TriggerEntry> _entries = new HashSet<TriggerEntry>();
 
 }

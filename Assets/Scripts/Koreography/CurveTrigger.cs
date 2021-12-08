@@ -74,7 +74,7 @@ public class CurveTrigger : KoreoResponder
     {
         _curveValue = null;
         
-        _entries.ExceptWith(_entries.Where(entry => entry.Ended(Time.time)));
+        _entries.ExceptWith(_entries.Where(entry => entry.Ended(Time.time)).ToList());
     }
 
     private class TriggerEntry

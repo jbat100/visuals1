@@ -5,7 +5,6 @@ using UnityEngine.VFX;
 
 using UnityEditor;
 
-
 [CustomEditor(typeof(TestEvent))]
 public class TestEventEditor : Editor
 {
@@ -26,6 +25,10 @@ public class TestEventEditor : Editor
 public class TestEvent : MonoBehaviour
 {
     [SerializeField] private string _eventName;
+
+    [SerializeField] private float _range;
+    
+    [SerializeField] private Color _eventColor;
     
     private VisualEffect _visualEffect;
 
@@ -37,6 +40,15 @@ public class TestEvent : MonoBehaviour
     public void SendEvent()
     {
         Debug.Log($"Send event : {_eventName}");
-        _visualEffect.SendEvent(_eventName);
+
+        Vector3 position = this.transform.position + Random.insideUnitSphere * _range;
+        Color color = Random.ColorHSV(0, 1);
+        
+        VFXEventAttribute eventAttribute = _visualEffect.CreateVFXEventAttribute();
+        
+        eventAttribute.SetVector3("color", new Vector3(color.r, color.g, color.b));
+        eventAttribute.SetVector3("position", position);
+        
+        _visualEffect.SendEvent(_eventName, eventAttribute);
     }
 }

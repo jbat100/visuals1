@@ -32,6 +32,7 @@ public class MIDIVFXEvent : MIDINoteCallback
         eventAttribute.SetVector3("color", new Vector3(color.r, color.g, color.b));
         eventAttribute.SetVector3("position", position);
         eventAttribute.SetVector3("scale", scale * Vector3.one);
+        eventAttribute.SetFloat("size", scale );
         
         _visualEffect.SendEvent(_eventName, eventAttribute);
     }

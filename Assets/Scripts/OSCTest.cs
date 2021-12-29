@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using PathCreation;
-using PathCreation.Examples;
 using UnityEngine;
 
 public class OSCTest : MonoBehaviour
@@ -12,14 +8,12 @@ public class OSCTest : MonoBehaviour
     public void TestFloat(float val)
     {
         Debug.Log($"{this} recieved float {val}");
-
-        _pathFollower.speed = _velocityScale * val;
+        _pathFollower.Speed = _velocityScale * val;
     }
 
     public void TestInt(int val)
     {
         Debug.Log($"{this} recieved int {val}");
-
         _pathFollower.enabled = val != 0;
     }
 }

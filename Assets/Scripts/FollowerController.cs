@@ -10,14 +10,14 @@ public class FollowerController : MonoBehaviour
     
     protected void Awake()
     {
-        _referenceSpeed = _pathFollower.speed * 0.5f;
+        _referenceSpeed = _pathFollower.Speed * 0.5f;
         _referenceScale = _pathFollower.transform.localScale *0.5f; 
     }
 
     public void SetSpeed(float val)
     {
         Debug.Log($"{this} recieved speed {val}");
-        _pathFollower.speed = _referenceSpeed * val;
+        _pathFollower.Speed = _referenceSpeed * val;
     }
 
     public void SetEnabled(int val)

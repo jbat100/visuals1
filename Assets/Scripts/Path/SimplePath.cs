@@ -1,15 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using PathCreation;
+using Sonosthesia;
 using UnityEngine;
 using UnityTemplateProjects.Path;
 
-public class TransformedPathProvider : MonoBehaviour, IPathProvider
+public class SimplePath : Path, IPathProvider
 {
     [SerializeField] private PathCreator _pathCreator;
+    [SerializeField] private EndOfPathInstruction _endOfPathInstruction;
     
-    private VertexPath _vertexPath; 
-    
+    private VertexPath _vertexPath;
     public VertexPath VertexPath
     {
         get
@@ -21,4 +20,8 @@ public class TransformedPathProvider : MonoBehaviour, IPathProvider
             return _vertexPath;
         }
     }
+    
+    public override Vector3 Position(float distance) => VertexPath.GetPointAtDistance(distance, _endOfPathInstruction);
+
+    public override Quaternion Rotation(float distance) => VertexPath.GetRotationAtDistance(distance, _endOfPathInstruction);
 }

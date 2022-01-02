@@ -2,15 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GradientMacroComponent : MacroComponent
+namespace Sonosthesia
 {
-    [SerializeField] private Gradient _gradient;
-    
-    protected override void Apply(float value, MacroTarget target)
+    public class GradientMacroComponent : MacroComponent
     {
-        base.Apply(value, target);
-        Color result = _gradient.Evaluate(value);
-        target.SetColor(result);
-    }
+        [SerializeField] private Gradient _gradient;
     
+        protected override void Apply(float value, MacroTarget target)
+        {
+            base.Apply(value, target);
+            Color result = _gradient.Evaluate(value);
+            target.SetColor(result);
+        }
+    }
 }
+

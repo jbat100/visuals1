@@ -1,46 +1,51 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MacroController : MonoBehaviour
+namespace Sonosthesia
 {
-    private readonly List<MacroComponent> _components = new List<MacroComponent>();
+    public class MacroController : MonoBehaviour
+    {
+        private readonly List<MacroComponent> _components = new List<MacroComponent>();
 
-    [SerializeField] private float _lerp;
+        [SerializeField] private float _lerp;
 
-    private float? current;
-    private float? target;
+        private float? current;
+        private float? target;
     
-    protected virtual void Awake()
-    {
-        _components.AddRange(GetComponentsInChildren<MacroComponent>());
-    }
-
-    protected void Broadcast(float value)
-    {
-        if (_lerp == 0f)
+        protected virtual void Awake()
         {
-            Debug.Log($"{this} {nameof(Broadcast)} unlerped {value} to {_components.Count} component(s)");
-            foreach (MacroComponent component in _components)
+            _components.AddRange(GetComponentsInChildren<MacroComponent>());
+        }
+
+        protected void Broadcast(float value)
+        {
+            if (_lerp == 0f)
             {
-                component.Value = value;
+                Debug.Log($"{this} {nameof(Broadcast)} unlerped {value} to {_components.Count} component(s)");
+                foreach (MacroComponent component in _components)
+                {
+                    component.Value = value;
+                }
+            }
+            else
+            {
+                target = value;
             }
         }
-        else
-        {
-            target = value;
-        }
-    }
 
-    protected virtual void Update()
-    {
-        if (target.HasValue)
+        protected virtual void Update()
         {
-            current = current.HasValue ? Mathf.Lerp(current.Value, target.Value, _lerp) : target.Value;
-            Debug.Log($"{this} {nameof(Broadcast)} lerped {current.Value} to {_components.Count} component(s)");
-            foreach (MacroComponent component in _components)
+            if (target.HasValue)
             {
-                component.Value = current.Value;
+                current = current.HasValue ? Mathf.Lerp(current.Value, target.Value, _lerp) : target.Value;
+                Debug.Log($"{this} {nameof(Broadcast)} lerped {current.Value} to {_components.Count} component(s)");
+                foreach (MacroComponent component in _components)
+                {
+                    component.Value = current.Value;
+                }
             }
         }
     }
 }
+
+

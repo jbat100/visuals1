@@ -2,39 +2,44 @@ using Minis;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class MIDIMacroController : MacroController
+namespace Sonosthesia
 {
-    [SerializeField] private int _channel;
-    [SerializeField] private int _number;
+    public class MIDIMacroController : MacroController
+    {
+        [SerializeField] private int _channel;
+        [SerializeField] private int _number;
     
-    protected override void Awake()
-    {
-        base.Awake();
-        
-        InputSystem.onDeviceChange += (device, change) =>
+        protected override void Awake()
         {
-            if (change != InputDeviceChange.Added) return;
-
-            var midiDevice = device as Minis.MidiDevice;
-            if (midiDevice == null) return;
-
-            int GetChannel(MidiValueControl control) => ((Minis.MidiDevice) control.device).channel;
-
-            midiDevice.onWillControlChange += (control, value) =>
+            base.Awake();
+        
+            InputSystem.onDeviceChange += (device, change) =>
             {
-                int channel = GetChannel(control);
-                MIDIControlChange(channel, control.controlNumber, value);
-            };
-        };
-    }
+                if (change != InputDeviceChange.Added) return;
 
-    protected virtual void MIDIControlChange(int channel, int number, float value)
-    {
-        Debug.Log($"{this} {nameof(MIDIControlChange)} channel {channel} number {number} value {value}");
-        
-        if (channel == _channel && number == _number)
+                var midiDevice = device as Minis.MidiDevice;
+                if (midiDevice == null) return;
+
+                int GetChannel(MidiValueControl control) => ((Minis.MidiDevice) control.device).channel;
+
+                midiDevice.onWillControlChange += (control, value) =>
+                {
+                    int channel = GetChannel(control);
+                    MIDIControlChange(channel, control.controlNumber, value);
+                };
+            };
+        }
+
+        protected virtual void MIDIControlChange(int channel, int number, float value)
         {
-            Broadcast(value);
+            Debug.Log($"{this} {nameof(MIDIControlChange)} channel {channel} number {number} value {value}");
+        
+            if (channel == _channel && number == _number)
+            {
+                Broadcast(value);
+            }
         }
     }
+
 }
+

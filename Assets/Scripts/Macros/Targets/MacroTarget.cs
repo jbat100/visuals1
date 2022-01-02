@@ -1,27 +1,47 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MacroTarget : MonoBehaviour
+namespace Sonosthesia
 {
-    public virtual void SetFloat(float value)
+    public class MacroTarget : MonoBehaviour
     {
-        throw new NotImplementedException();
-    }
+        private readonly HashSet<IMacroProcessor> _processors = new HashSet<IMacroProcessor>();
 
-    public virtual void SetColor(Color value)
-    {
-        throw new NotImplementedException();
-    }
+        protected void RegisterProcessor(IMacroProcessor processor)
+        {
+            _processors.Add(processor);
+        }
     
-    public virtual void SetVector3(Vector3 value)
-    {
-        throw new NotImplementedException();
-    }
+        protected virtual void Update()
+        {
+            foreach (IMacroProcessor processor in _processors)
+            {
+                processor.Update(Time.deltaTime);
+            }
+        }
+        
+        public virtual void SetFloat(float value)
+        {
+            _processors.SetFloat(value);
+        }
+
+        public virtual void SetColor(Color value)
+        {
+            _processors.SetColor(value);
+        }
     
-    public virtual void SetVector4(Vector4 value)
-    {
-        throw new NotImplementedException();
-    }
+        public virtual void SetVector3(Vector3 value)
+        {
+            _processors.SetVector3(value);
+        }
+    
+        public virtual void SetVector4(Vector4 value)
+        {
+            _processors.SetVector4(value);
+        }
+        
+    }    
 }
+
+

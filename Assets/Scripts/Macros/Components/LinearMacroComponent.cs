@@ -1,9 +1,11 @@
 using UnityEngine;
 
-public class LinearMacroComponent : MacroComponent
+namespace Sonosthesia
 {
-    
-    
-    
-
+    public class LinearMacroComponent : MacroComponent
+    {
+        
+    }
 }
+
+

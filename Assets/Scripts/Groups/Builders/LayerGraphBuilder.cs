@@ -7,10 +7,11 @@ namespace Sonosthesia
 {
     public class LayerGraphBuilder : GraphBuilder
     {
-        protected override void Build(Node root, GraphConfiguration configuration)
+        protected override void Build(Node root, GroupConfiguration groupConfiguration, GraphConfiguration graphConfiguration)
         {
-            LayerGraphConfiguration layerGraphConfiguration = (LayerGraphConfiguration)configuration;
-            int nodes = layerGraphConfiguration.Nodes;
+            int nodes = groupConfiguration.Nodes;
+            
+            LayerGraphConfiguration layerGraphConfiguration = (LayerGraphConfiguration)graphConfiguration;
             int layerNodes = layerGraphConfiguration.LayerNodes;
             Vector3 positionOffset = layerGraphConfiguration.PositionOffset;
             

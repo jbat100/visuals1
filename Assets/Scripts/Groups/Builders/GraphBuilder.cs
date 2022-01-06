@@ -2,26 +2,29 @@ using UnityEngine;
 
 namespace Sonosthesia
 {
-    public class GraphBuilder : MonoBehaviour
+    public abstract class GraphBuilder : MonoBehaviour
     {
         [SerializeField] private GameObject _leafPrefab;
-        [SerializeField] private GraphConfiguration _configuration;
+        [SerializeField] private GroupConfiguration _groupConfiguration;
+        [SerializeField] private GraphConfiguration _graphConfiguration;
         [SerializeField] private bool _autoBuild;
 
         protected virtual void Awake()
         {
             if (_autoBuild)
             {
-                GameObject rootObject = new GameObject("Root");
-                rootObject.transform.parent = transform;
-                Node rootNode = rootObject.AddComponent<Node>();
+                Node rootNode = GetComponent<Node>();
+                if (!rootNode)
+                {
+                    rootNode = gameObject.AddComponent<Node>();   
+                }
                 Build(rootNode);
             }
         }
         
         public void Build(Node root)
         {
-            Build(root, _configuration);
+            Build(root, _groupConfiguration, _graphConfiguration);
 
             if (_leafPrefab)
             {
@@ -33,10 +36,7 @@ namespace Sonosthesia
             }
         }
 
-        protected virtual void Build(Node root, GraphConfiguration configuration)
-        {
-            
-        }
+        protected abstract void Build(Node root, GroupConfiguration groupConfiguration, GraphConfiguration graphConfiguration);
     }    
 }
 

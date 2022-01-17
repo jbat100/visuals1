@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
@@ -15,6 +16,10 @@ namespace Sonosthesia
         
         public Node GetChild(int i)
         {
+            if (i < 0 || i >= _children.Count)
+            {
+                throw new ArgumentOutOfRangeException($"bad child index {i}, node has {_children.Count} children");
+            }
             return _children[i];
         }
 
@@ -71,6 +76,19 @@ namespace Sonosthesia
                     return;
                 default:
                     return;
+            }
+        }
+
+        private TransformMonitor _transformMonitor;
+        public TransformMonitor TransformMonitor
+        {
+            get
+            {
+                if (!_transformMonitor)
+                {
+                    _transformMonitor = this.GetOrAddComponent<TransformMonitor>();
+                }
+                return _transformMonitor;
             }
         }
     }

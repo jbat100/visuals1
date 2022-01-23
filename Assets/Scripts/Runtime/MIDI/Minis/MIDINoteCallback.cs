@@ -1,9 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using Minis;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+namespace Sonosthesia
+{
+    
 public class MIDINoteCallback : MonoBehaviour
 {
     protected virtual void Awake()
@@ -34,7 +35,7 @@ public class MIDINoteCallback : MonoBehaviour
                     (note.device as Minis.MidiDevice)?.channel,
                     note.device.description.product
                 ));
-                MIDINoteOn(channel, note.noteNumber, velocity);
+                MIDINoteOn(new MIDINote(channel, note.noteNumber, velocity));
             };
 
             midiDevice.onWillNoteOff += (note) => {
@@ -49,18 +50,20 @@ public class MIDINoteCallback : MonoBehaviour
                     note.device.description.product
                 ));
                 
-                MIDINoteOff(channel, note.noteNumber, note.velocity);
+                MIDINoteOff(new MIDINote(channel, note.noteNumber, note.velocity));
             };
         };
     }
 
-    protected virtual void MIDINoteOn(int channel, int note, float velocity)
+    protected virtual void MIDINoteOn(MIDINote midiNote)
     {
         
     }
 
-    protected virtual void MIDINoteOff(int channel, int note, float velocity)
+    protected virtual void MIDINoteOff(MIDINote midiNote)
     {
         
     }
 }
+}
+

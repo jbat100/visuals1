@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -5,59 +7,72 @@ namespace Sonosthesia
 {
     public class MIDIVFXEvent : MIDINoteCallback
     {
-        [SerializeField] private MIDIVFXSource<Color> _colorSource;
-    
+        [SerializeField] private List<VisualEffect> _visualEffects;
+
         [SerializeField] private string _eventName;
 
-        [SerializeField] private float _distanceRange;
-    
-        [SerializeField] private Gradient _gradient;
-
-        [SerializeField] private Vector2 _scaleRange;
-
         [SerializeField] private int _channel;
-    
-        private VisualEffect _visualEffect;
-    
-        protected override void Awake()
-        {
-            _visualEffect = GetComponent<VisualEffect>();
-            base.Awake();
-        }
 
-        public void SendEvent(Color color, float scale)
-        {
-            Debug.Log($"Send event : {_eventName} color {color} scale {scale}");
+        [Header("Sources")] 
+        
+        [SerializeField] private MIDIVFXSource<Color> _colorSource;
 
-            Vector3 position = this.transform.position + Random.insideUnitSphere * _distanceRange;
-        
-            VFXEventAttribute eventAttribute = _visualEffect.CreateVFXEventAttribute();
-        
-            eventAttribute.SetVector3("color", new Vector3(color.r, color.g, color.b));
-            eventAttribute.SetVector3("position", position);
-            eventAttribute.SetVector3("scale", scale * Vector3.one);
-            eventAttribute.SetFloat("size", scale );
-        
-            _visualEffect.SendEvent(_eventName, eventAttribute);
-        }
-    
-        protected override void MIDINoteOn(int channel, int note, float velocity)
+        [SerializeField] private MIDIVFXSource<Vector3> _positionSource;
+
+        [SerializeField] private MIDIVFXSource<Vector3> _scaleSource;
+
+        [SerializeField] private MIDIVFXSource<float> _sizeSource;
+
+        protected override void MIDINoteOn(MIDINote midiNote)
         {
-            base.MIDINoteOn(channel, note, velocity);
-        
-            Debug.Log($"MIDI channel {channel} note {note} velocity {velocity}");
-        
-            if (channel != _channel)
+            base.MIDINoteOn(midiNote);
+
+            Debug.Log($"{nameof(MIDINoteOn)} {midiNote}");
+
+            if (midiNote.Channel != _channel)
             {
                 return;
             }
-        
-            Color color = _gradient.Evaluate(note / 127f);
-            float scale = _scaleRange.y * velocity;
-        
-            SendEvent(color, scale);
+
+            foreach (VisualEffect visualEffect in _visualEffects)
+            {
+                VFXEventAttribute eventAttribute = visualEffect.CreateVFXEventAttribute();
+                ConfigureAttribute(eventAttribute, midiNote);
+                visualEffect.SendEvent(_eventName, eventAttribute);
+            }
         }
-   
+
+        protected virtual void ConfigureAttribute(VFXEventAttribute eventAttribute, MIDINote midiNote)
+        {
+            StringBuilder descriptionBuilder = new StringBuilder($"{this} event ({midiNote}) attributes:");
+
+            if (_colorSource)
+            {
+                Color color = _colorSource.MIDIToVFXAttribute(midiNote);
+                eventAttribute.SetVector3("color", new Vector3(color.r, color.g, color.b));
+                descriptionBuilder.Append($" color {color}");
+            }
+
+            if (_positionSource)
+            {
+                Vector3 position = _positionSource.MIDIToVFXAttribute(midiNote);
+                eventAttribute.SetVector3("position", position);
+                descriptionBuilder.Append($" position {position}");
+            }
+
+            if (_scaleSource)
+            {
+                Vector3 scale = _scaleSource.MIDIToVFXAttribute(midiNote);
+                eventAttribute.SetVector3("scale", scale);
+                descriptionBuilder.Append($" scale {scale}");
+            }
+
+            if (_sizeSource)
+            {
+                float size = _sizeSource.MIDIToVFXAttribute(midiNote);
+                eventAttribute.SetFloat("size", size);
+                descriptionBuilder.Append($" size {size}");
+            }
+        }
     }
-    
 }

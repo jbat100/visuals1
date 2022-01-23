@@ -4,7 +4,7 @@ namespace Sonosthesia
 {
     public interface IMIDIVFXSource<out T>
     {
-        T MIDIToVFXAttribute(int channel, int note, float velocity);
+        T MIDIToVFXAttribute(MIDINote note);
     }
     
     public interface IMIDIVFXColorSource : IMIDIVFXSource<Color> { }

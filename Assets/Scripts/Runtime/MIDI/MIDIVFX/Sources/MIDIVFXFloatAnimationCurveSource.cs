@@ -1,10 +1,15 @@
+using UnityEngine;
+
 namespace Sonosthesia
 {
-    public class MIDIVFXFloatAnimationCurveSource : MIDIVFXSource<float>
+    public class MIDIVFXFloatAnimationCurveSource : MIDIVFXDrivenSource<float>
     {
-        public override float MIDIToVFXAttribute(int channel, int note, float velocity)
+        [SerializeField] private AnimationCurve _animationCurve;
+        
+        public override float MIDIToVFXAttribute(MIDINote midiNote)
         {
-            throw new System.NotImplementedException();
+            float value = SelectValueFromNote(midiNote);
+            return _animationCurve.Evaluate(value);
         }
     }
 }

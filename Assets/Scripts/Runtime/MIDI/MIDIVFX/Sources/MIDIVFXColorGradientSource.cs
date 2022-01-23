@@ -2,13 +2,13 @@ using UnityEngine;
 
 namespace Sonosthesia
 {
-    public class MIDIVFXColorGradientSource : MIDIVFXSource<Color>
+    public class MIDIVFXColorGradientSource : MIDIVFXDrivenSource<Color>
     {
         [SerializeField] private Gradient _gradient;
 
-        public override Color MIDIToVFXAttribute(int channel, int note, float velocity)
+        public override Color MIDIToVFXAttribute(MIDINote midiNote)
         {
-            float value = SelectValueFromNote(channel, note, velocity);
+            float value = SelectValueFromNote(midiNote);
             return _gradient.Evaluate(value);
         }
     }    

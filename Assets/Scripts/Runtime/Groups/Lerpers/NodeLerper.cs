@@ -8,7 +8,7 @@ namespace Sonosthesia
     public class NodeLerper : MonoBehaviour
     {
         [SerializeField] private float _duration = 1f;
-        [SerializeField] private float _minTransferVelocity = 1f;
+        [SerializeField] private float _maxTransferVelocity = 1f;
         [SerializeField] private Ease _ease = Ease.InOutQuad;
         [SerializeField] private bool _logIndex;
 
@@ -59,7 +59,7 @@ namespace Sonosthesia
                 Vector3 targetPosition = Vector3.Lerp(target1.position, target2.position, _transfer);
                 Quaternion targetRotation = Quaternion.Slerp(target1.rotation, target2.rotation, _transfer);
 
-                origin.position = Vector3.MoveTowards(origin.position, targetPosition, _minTransferVelocity * Time.deltaTime);
+                origin.position = Vector3.MoveTowards(origin.position, targetPosition, _maxTransferVelocity * Time.deltaTime);
                 origin.rotation = targetRotation;
             }
             else if (_index.HasValue)

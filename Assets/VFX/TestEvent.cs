@@ -28,7 +28,7 @@ public class TestEvent : MonoBehaviour
 
     [SerializeField] private float _range;
     
-    [SerializeField] private Color _eventColor;
+    [SerializeField] [ColorUsage(true, true)] private Color _eventColor;
     
     private VisualEffect _visualEffect;
 

@@ -96,5 +96,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _duration: 1
-  _minTransferVelocity: 1
+  _maxTransferVelocity: 10
   _ease: 7
+  _logIndex: 0

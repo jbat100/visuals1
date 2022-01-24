@@ -6,6 +6,7 @@ public class PathFollower : MonoBehaviour
     [SerializeField] private Path _path;
     [SerializeField] private float _speed = 5;
     [SerializeField] private bool _local;
+    [SerializeField] private bool _normalized;
 
     public float Speed
     {
@@ -20,13 +21,13 @@ public class PathFollower : MonoBehaviour
         _distance += _speed * Time.deltaTime;
         if (_local)
         {
-            transform.localPosition = _path.Position(_distance);
-            transform.localRotation = _path.Rotation(_distance);   
+            transform.localPosition = _path.Position(_distance, _normalized);
+            transform.localRotation = _path.Rotation(_distance, _normalized);   
         }
         else
         {
-            transform.position = _path.Position(_distance);
-            transform.rotation = _path.Rotation(_distance);            
+            transform.position = _path.Position(_distance, _normalized);
+            transform.rotation = _path.Rotation(_distance, _normalized);            
         }
     }
 }

@@ -6,6 +6,8 @@ namespace Sonosthesia
     public interface IPathVelocityTransformProcessorParameters : IProcessorParameters, IOffsetParameters, IScaleParameters
     {
         Path Path { get; }
+        
+        bool Normalized { get; }
     }
 
     [Serializable]
@@ -13,6 +15,9 @@ namespace Sonosthesia
     {
         [SerializeField] private Path _path;
         public Path Path => _path;
+        
+        [SerializeField] private bool _normalized;
+        public bool Normalized => _normalized;
     }
     
     public class PathVelocityTransformProcessor : TransformProcessor
@@ -34,8 +39,8 @@ namespace Sonosthesia
         {
             IPathVelocityTransformProcessorParameters parameters = (IPathVelocityTransformProcessorParameters) _parameters;
             _distance += (_velocity * parameters.Scale + parameters.Offset) * Time.deltaTime;
-            _transform.localPosition = parameters.Path.Position(_distance);
-            _transform.localRotation = parameters.Path.Rotation(_distance);   
+            _transform.localPosition = parameters.Path.Position(_distance, parameters.Normalized);
+            _transform.localRotation = parameters.Path.Rotation(_distance, parameters.Normalized);   
         }
     }
 }

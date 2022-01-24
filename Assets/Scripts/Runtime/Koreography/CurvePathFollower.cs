@@ -7,6 +7,7 @@ public class CurvePathFollower : KoreoResponder
 {
     [SerializeField] private Path _path;
     [SerializeField] private float _speed = 5;
+    [SerializeField] private bool _normalized;
 
     private float _factor;
     
@@ -17,8 +18,8 @@ public class CurvePathFollower : KoreoResponder
         Debug.Log($"{this} {nameof(Update)} with {nameof(_factor)} {_factor}");
         
         _distanceTravelled += _speed * _factor * Time.deltaTime;
-        transform.position = _path.Position(_distanceTravelled);
-        transform.rotation = _path.Rotation(_distanceTravelled);
+        transform.position = _path.Position(_distanceTravelled, _normalized);
+        transform.rotation = _path.Rotation(_distanceTravelled, _normalized);
     }
     
     protected override void OnEvent(KoreographyEvent koreographyEvent, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)

@@ -11,27 +11,37 @@ namespace Sonosthesia
         Channel,
         Note,
         Velocity,
-        Random
+        Random,
+        Time
     }
     
     public abstract class MIDIVFXDrivenSource<T> : MIDIVFXSource<T>
     {
-        [SerializeField] private MIDIVFXDriver driver;
+        [SerializeField] private MIDIVFXDriver _driver;
 
         [SerializeField] private float _offset;
         
         [SerializeField] private float _scale = 1f;
 
         [SerializeField] private Ease _ease = Ease.Linear;
+
+        [SerializeField] private float _warp = 1f;
         
         protected float SelectValueFromNote(MIDINote midiNote)
         {
-            float raw = driver switch
+            if (_driver == MIDIVFXDriver.Time)
+            {
+                float time = (Time.time * _scale) + _offset;
+                return time - Mathf.Floor(time);
+            }
+            
+            float raw = _driver switch
             {
                 MIDIVFXDriver.Channel => midiNote.Channel / 15f,
                 MIDIVFXDriver.Note => midiNote.Note / 127f,
                 MIDIVFXDriver.Velocity => midiNote.Velocity,
                 MIDIVFXDriver.Random => Random.value,
+                MIDIVFXDriver.Time => (Time.time * _warp) - (Mathf.Floor(Time.time * _warp)),
                 _ => 0f
             };
 

@@ -73,6 +73,8 @@ namespace Sonosthesia
                 eventAttribute.SetFloat("size", size);
                 descriptionBuilder.Append($" size {size}");
             }
+            
+            Debug.Log(descriptionBuilder.ToString());
         }
     }
 }

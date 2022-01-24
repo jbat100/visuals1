@@ -6,6 +6,8 @@ namespace Sonosthesia
     public interface IPathDistanceTransformProcessorParameters : IProcessorParameters, IOffsetParameters, IScaleParameters
     {
         Path Path { get; }
+        
+        bool Normalized { get; }
     }
 
     [Serializable]
@@ -13,6 +15,9 @@ namespace Sonosthesia
     {
         [SerializeField] private Path _path;
         public Path Path => _path;
+
+        [SerializeField] private bool _normalized;
+        public bool Normalized => _normalized;
     }
     
     public class PathDistanceTransformProcessor : TransformProcessor
@@ -26,8 +31,8 @@ namespace Sonosthesia
         {
             IPathDistanceTransformProcessorParameters parameters = (IPathDistanceTransformProcessorParameters) _parameters;
             float distance = (value * parameters.Scale) + parameters.Offset;
-            _transform.localPosition = parameters.Path.Position(distance);
-            _transform.localRotation = parameters.Path.Rotation(distance);   
+            _transform.localPosition = parameters.Path.Position(distance, parameters.Normalized);
+            _transform.localRotation = parameters.Path.Rotation(distance, parameters.Normalized);   
         }
     }
 
